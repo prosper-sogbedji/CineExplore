@@ -1,8 +1,8 @@
 # CineExplore
 
 ![CI](https://github.com/prosper-sogbedji/CineExplore/actions/workflows/ci.yml/badge.svg)
-![Flutter](https://img.shields.io/badge/Flutter-3.32-blue?logo=flutter)
-![Dart](https://img.shields.io/badge/Dart-3.8-blue?logo=dart)
+![Flutter](https://img.shields.io/badge/Flutter-3.44+-blue?logo=flutter)
+![Dart](https://img.shields.io/badge/Dart-3.12+-blue?logo=dart)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 Application Flutter **production-ready** de découverte de films, construite avec une architecture Clean (Feature-First), une intégration API complète (TMDB + JWT), un cache SQLite et une suite de tests complète.
