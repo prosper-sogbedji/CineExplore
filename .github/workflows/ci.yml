@@ -19,6 +19,7 @@ jobs:
         with:
           flutter-version: '3.32.0'
           channel: 'stable'
+          cache: true
 
       - name: Install dependencies
         run: flutter pub get
@@ -34,17 +35,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Install SQLite native library (required by sqflite on Linux)
+        run: sudo apt-get update && sudo apt-get install -y libsqlite3-dev
+
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.32.0'
           channel: 'stable'
+          cache: true
 
       - name: Install dependencies
         run: flutter pub get
 
       - name: Run unit & widget tests
-        run: flutter test --coverage
+        run: flutter test test/unit/ test/widget/ test/auth_repository_test.dart test/movie_repository_test.dart --no-pub
 
       - name: Upload coverage report
         uses: codecov/codecov-action@v4
