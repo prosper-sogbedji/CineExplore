@@ -35,11 +35,11 @@ GoRouter createAppRouter() {
     routes: [
       GoRoute(
         path: '/login',
-        builder: (context, state) => LoginScreen(),
+        builder: (context, state) => const LoginScreen(),
       ),
       GoRoute(
         path: '/register',
-        builder: (context, state) => RegisterScreen(),
+        builder: (context, state) => const RegisterScreen(),
       ),
       ShellRoute(
         builder: (context, state, child) => AppScaffold(child: child),

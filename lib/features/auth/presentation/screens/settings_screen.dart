@@ -18,29 +18,35 @@ class SettingsScreen extends StatelessWidget {
       ),
       body: ListView(
         children: [
-          UserAccountsDrawerHeader(
-            accountName: const Text('Utilisateur Connecté'),
-            accountEmail: const Text('Connecté via Token JWT'),
-            currentAccountPicture: const CircleAvatar(
+          const UserAccountsDrawerHeader(
+            accountName: Text('Utilisateur Connecté'),
+            accountEmail: Text('Connecté via Token JWT'),
+            currentAccountPicture: CircleAvatar(
               child: Icon(Icons.person, size: 40),
             ),
           ),
           SwitchListTile(
             title: const Text('Mode Sombre'),
-            subtitle: const Text('Activer le theme sombre'),
+            subtitle: const Text('Activer le thème sombre'),
             value: themeController.isDarkMode,
             onChanged: (value) => themeController.setDarkMode(value),
           ),
           const Divider(),
-          ListTile(
-            leading: const Icon(Icons.logout, color: Colors.red),
-            title: const Text('Se déconnecter', style: TextStyle(color: Colors.red)),
-            onTap: () async {
-              await auth.logout();
-              if (context.mounted) {
-                context.go('/login');
-              }
-            },
+          Semantics(
+            label: 'Bouton se déconnecter',
+            child: ListTile(
+              leading: const Icon(Icons.logout, color: Colors.red),
+              title: const Text(
+                'Se déconnecter',
+                style: TextStyle(color: Colors.red),
+              ),
+              onTap: () async {
+                await auth.logout();
+                if (context.mounted) {
+                  context.go('/login');
+                }
+              },
+            ),
           ),
         ],
       ),

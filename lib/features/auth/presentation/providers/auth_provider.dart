@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
 import '../../data/repositories/auth_repository.dart';
+import '../../data/models/user_model.dart';
 
 class AuthProvider extends ChangeNotifier {
-  final AuthRepository _repository = AuthRepository();
-  
+  final AuthRepository _repository;
+
+  AuthProvider() : _repository = AuthRepository() {
+    checkAuthStatus();
+  }
+
+  AuthProvider.withRepository(this._repository) {
+    checkAuthStatus();
+  }
+
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
@@ -13,9 +22,8 @@ class AuthProvider extends ChangeNotifier {
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
-  AuthProvider() {
-    checkAuthStatus();
-  }
+  UserModel? _currentUser;
+  UserModel? get currentUser => _currentUser;
 
   Future<void> checkAuthStatus() async {
     _isAuthenticated = await _repository.isLoggedIn();
@@ -25,7 +33,7 @@ class AuthProvider extends ChangeNotifier {
   Future<bool> login(String email, String password) async {
     _setLoading(true);
     try {
-      await _repository.login(email, password);
+      _currentUser = await _repository.login(email, password);
       _isAuthenticated = true;
       _errorMessage = null;
       _setLoading(false);
@@ -40,7 +48,7 @@ class AuthProvider extends ChangeNotifier {
   Future<bool> register(String email, String password) async {
     _setLoading(true);
     try {
-      await _repository.register(email, password);
+      _currentUser = await _repository.register(email, password);
       _isAuthenticated = true;
       _errorMessage = null;
       _setLoading(false);
@@ -55,6 +63,7 @@ class AuthProvider extends ChangeNotifier {
   Future<void> logout() async {
     await _repository.logout();
     _isAuthenticated = false;
+    _currentUser = null;
     notifyListeners();
   }
 

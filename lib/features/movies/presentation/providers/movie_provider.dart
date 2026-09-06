@@ -3,7 +3,10 @@ import '../../data/repositories/movie_repository.dart';
 import '../../data/models/movie.dart';
 
 class MovieProvider extends ChangeNotifier {
-  final MovieRepository _repository = MovieRepository();
+  final MovieRepository _repository;
+
+  MovieProvider() : _repository = MovieRepository();
+  MovieProvider.withRepository(this._repository);
 
   List<Movie> _trendingMovies = [];
   List<Movie> get trendingMovies => _trendingMovies;
@@ -45,7 +48,7 @@ class MovieProvider extends ChangeNotifier {
     }
     _setLoading(false);
   }
-  
+
   void clearSearch() {
     _searchResults = [];
     notifyListeners();

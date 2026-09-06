@@ -1,70 +1,122 @@
-# CineExplore Full-Stack
+# CineExplore
 
-CineExplore a été mis à niveau vers une application Flutter full-stack pour valider la maîtrise des APIs, de l'architecture et de la persistance des données. 
+![CI](https://github.com/prosper-sogbedji/CineExplore/actions/workflows/ci.yml/badge.svg)
+![Flutter](https://img.shields.io/badge/Flutter-3.32-blue?logo=flutter)
+![Dart](https://img.shields.io/badge/Dart-3.8-blue?logo=dart)
+![License](https://img.shields.io/badge/license-MIT-green)
+
+Application Flutter **production-ready** de découverte de films, construite avec une architecture Clean (Feature-First), une intégration API complète (TMDB + JWT), un cache SQLite et une suite de tests complète.
+
+---
 
 ## Fonctionnalités
 
-- **Authentification (JWT)** : Système de connexion et d'inscription avec stockage sécurisé du token.
-- **Catalogue Connecté** : Intégration avec **TMDB (The Movie Database)** pour récupérer les films tendances, rechercher des films, et afficher les détails.
-- **Cache Local & Hors-ligne** : Les films récupérés sont sauvegardés via **SQLite**. En cas de perte réseau, l'application bascule automatiquement sur le cache local.
-- **Gestion des Erreurs** : Interception des erreurs réseau avec feedbacks utilisateurs clairs.
-- **Architecture Clean / Feature-First** : Code organisé par fonctionnalités (Auth, Movies) avec séparation stricte des couches (Data, Domain, Presentation).
+- 🎬 **Catalogue Connecté** : Films tendances et recherche via l'API **TMDB**
+- 🔐 **Authentification JWT** : Login / Register avec token persisté (ReqRes.in)
+- 📦 **Cache Hors-ligne** : Mode hors-ligne automatique via **SQLite** (`sqflite`)
+- 🌗 **Thème Clair / Sombre** dynamique
+- 🌐 **Internationalisation** : Support **FR 🇫🇷 + EN 🇬🇧**
+- ♿ **Accessibilité** : `Semantics` labels sur tous les éléments interactifs
+- ✅ **CI/CD** : Pipeline GitHub Actions (lint + tests automatiques)
 
-## Technologies
+---
 
-- **Flutter** & **Dart**
-- **Dio** : Appels réseau et intercepteurs (injection de token et fallback hors-ligne).
-- **SQLite (`sqflite`)** : Persistance des données relationnelles en local.
-- **Provider** : Gestion de l'état simple et réactive.
-- **GoRouter** : Navigation avec redirections basées sur l'état de l'authentification (Auth Guard).
-- **Mocktail** : Tests unitaires.
+## Architecture (Feature-First / Clean)
 
-## Architecture (Feature-First)
-
-```text
+```
 lib/
 ├── core/
-│   ├── database/       (Configuration SQLite, DatabaseHelper)
-│   ├── network/        (DioClient, AuthInterceptor, ApiConstants)
-│   ├── router/         (GoRouter, Auth Guard)
-│   └── theme/          (ThemeController)
+│   ├── database/       # SQLite — DatabaseHelper
+│   ├── l10n/           # Internationalisation (AppLocalizations FR/EN)
+│   ├── network/        # Dio, AuthInterceptor, ApiConstants
+│   ├── router/         # GoRouter avec Auth Guard
+│   └── theme/          # ThemeController, AppTheme
 ├── features/
 │   ├── auth/
-│   │   ├── data/       (Models, AuthRepository)
-│   │   └── presentation/ (LoginScreen, RegisterScreen, AuthProvider)
+│   │   ├── data/       # UserModel, AuthRepository
+│   │   └── presentation/ # LoginScreen, RegisterScreen, SettingsScreen, AuthProvider
 │   └── movies/
-│       ├── data/       (Models, MovieRepository, MovieDao)
-│       └── presentation/ (HomeScreen, MoviesScreen, DetailScreen, MovieProvider)
+│       ├── data/       # Movie, MovieRepository, MovieDao
+│       └── presentation/ # HomeScreen, MoviesScreen, MovieDetailScreen, MovieProvider
 └── shared/
-    └── widgets/        (Composants réutilisables)
+    └── widgets/        # MovieCard, MovieGrid, RatingBadge, EmptyState, AppScaffold
 ```
 
-## Configuration du Projet (IMPORTANT)
+**Flux de données** : `UI → Provider → Repository → (Dio API | SQLite DAO)`
 
-Pour utiliser ce projet, vous devez fournir votre propre clé d'API TMDB :
+---
 
-1. Ouvrez le fichier `lib/core/network/api_constants.dart`.
-2. Remplacez la valeur de `tmdbApiKey` par votre clé (ex: `static const String tmdbApiKey = 'VOTRE_CLE';`).
+## Configuration (IMPORTANT)
 
-L'authentification utilise l'API publique de test **ReqRes.in** pour simuler un vrai JWT backend (login/register). 
-- *Email de test* : `eve.holt@reqres.in`
-- *Mot de passe* : (n'importe lequel, ex: `cityslicka`)
+> ⚠️ **Clé API TMDB requise** avant de lancer l'application.
 
-## Installation
+1. Ouvrez `lib/core/network/api_constants.dart`
+2. Remplacez `'VOTRE_CLE_API_TMDB_ICI'` par votre clé TMDB
+
+**Compte de test (ReqRes.in)** :
+| Champ | Valeur |
+|---|---|
+| Email | `eve.holt@reqres.in` |
+| Mot de passe | `cityslicka` |
+
+---
+
+## Installation & Lancement
 
 ```bash
+# Installer les dépendances
 flutter pub get
+
+# Lancer l'application
 flutter run
 ```
 
+---
+
 ## Tests
 
-Plusieurs tests unitaires stricts ont été implémentés pour valider la logique d'accès aux données (Repository pattern).
+| Type | Fichiers | Nombre |
+|---|---|---|
+| Unitaires (Repository) | `test/auth_repository_test.dart`, `test/movie_repository_test.dart` | 6 |
+| Unitaires (Provider) | `test/unit/movie_provider_test.dart`, `test/unit/auth_provider_test.dart` | 14 |
+| Widgets | `test/widget/movie_card_test.dart`, `test/widget/shared_widgets_test.dart` | 11 |
+| Intégration | `integration_test/app_test.dart` | 2 |
+| **Total** | | **33 tests** |
 
 ```bash
+# Tous les tests unitaires + widgets
 flutter test
+
+# Tests d'intégration (nécessite un device/émulateur)
+flutter test integration_test/app_test.dart
 ```
 
-## Captures d'écran
+---
 
-(À rajouter par l'utilisateur une fois l'application lancée avec succès).
+## CI/CD
+
+Chaque push sur `main` déclenche automatiquement :
+1. **`flutter analyze`** — Analyse statique (zéro warning)
+2. **`flutter test`** — Suite complète de tests unitaires et widgets
+
+Voir [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
+
+---
+
+## Technologies
+
+| Package | Rôle |
+|---|---|
+| `dio` | Appels HTTP + intercepteurs |
+| `sqflite` | Cache local SQLite |
+| `go_router` | Navigation + Auth Guard |
+| `provider` | Gestion d'état |
+| `shared_preferences` | Persistance du token JWT |
+| `mocktail` | Tests unitaires avec mocks |
+| `flutter_localizations` | i18n FR + EN |
+
+---
+
+## Changelog
+
+Voir [CHANGELOG.md](CHANGELOG.md) pour l'historique complet des versions.
