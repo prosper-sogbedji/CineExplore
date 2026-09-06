@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../data/repositories/movie_repository.dart';
-import '../data/models/movie.dart';
+import '../../data/repositories/movie_repository.dart';
+import '../../data/models/movie.dart';
 
 class MovieProvider extends ChangeNotifier {
   final MovieRepository _repository = MovieRepository();

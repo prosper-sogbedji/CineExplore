@@ -52,7 +52,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         context.go('/home');
                       }
                     },
-                    child: const Text('S\\'inscrire'),
+                    child: const Text("S'inscrire"),
                   ),
             TextButton(
               onPressed: () => context.go('/login'),

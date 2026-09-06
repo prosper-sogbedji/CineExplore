@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../models/movie.dart';
+import '../../data/models/movie.dart';
 import '../providers/movie_provider.dart';
 import '../../../../shared/widgets/rating_badge.dart';
 import '../../../../shared/widgets/empty_state.dart';
@@ -51,7 +51,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
         body: const EmptyState(
           icon: Icons.error_outline,
           title: 'Film introuvable',
-          message: 'Le film que vous cherchez n\\'existe pas ou est indisponible.',
+          message: "Le film que vous cherchez n'existe pas ou est indisponible.",
         ),
       );
     }

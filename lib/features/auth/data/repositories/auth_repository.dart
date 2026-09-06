@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../../core/network/api_constants.dart';
-import '../../../core/network/dio_client.dart';
+import '../../../../core/network/dio_client.dart';
+import '../../../../core/network/api_constants.dart';
 import '../models/user_model.dart';
 
 class AuthRepository {
@@ -44,7 +44,7 @@ class AuthRepository {
       
       return user;
     } catch (e) {
-      throw Exception('Erreur lors de l\\'inscription.');
+      throw Exception("Erreur lors de l'inscription.");
     }
   }
 

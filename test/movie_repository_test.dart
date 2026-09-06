@@ -46,7 +46,7 @@ void main() {
       verify(() => mockMovieDao.cacheMovies(any())).called(1);
     });
 
-    test('getTrendingMovies retourne le cache en cas d\\'erreur réseau', () async {
+    test("getTrendingMovies retourne le cache en cas d'erreur réseau", () async {
       // Arrange
       when(() => mockDio.get(any(), queryParameters: any(named: 'queryParameters')))
           .thenThrow(DioException(requestOptions: RequestOptions(path: '')));

@@ -17,7 +17,7 @@ void main() {
   });
 
   group('AuthRepository Tests', () {
-    test('login sauvegarde le token JWT et retourne l\\'utilisateur', () async {
+    test("login sauvegarde le token JWT et retourne l'utilisateur", () async {
       // Arrange
       final mockResponse = {
         'token': 'QpwL5tke4Pnpja7X4'
