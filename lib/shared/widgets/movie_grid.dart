@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../data/models/movie.dart';
+import '../../features/movies/data/models/movie.dart';
 import 'movie_card.dart';
 
 class MovieGrid extends StatelessWidget {

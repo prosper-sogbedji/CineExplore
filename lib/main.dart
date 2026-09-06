@@ -1,54 +1,52 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import 'data/repositories/movie_repository.dart';
-import 'router/app_router.dart';
-import 'state/theme_controller.dart';
-import 'theme/app_theme.dart';
+import 'core/router/app_router.dart';
+import 'core/theme/theme_controller.dart';
+import 'core/theme/app_theme.dart';
+import 'features/auth/presentation/providers/auth_provider.dart';
+import 'features/movies/presentation/providers/movie_provider.dart';
 
 void main() {
-  runApp(CineExploreApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ThemeController()),
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => MovieProvider()),
+      ],
+      child: const CineExploreApp(),
+    ),
+  );
 }
 
 class CineExploreApp extends StatefulWidget {
-  CineExploreApp({super.key})
-    : repository = MovieRepository(),
-      themeController = ThemeController();
-
-  final MovieRepository repository;
-  final ThemeController themeController;
+  const CineExploreApp({super.key});
 
   @override
   State<CineExploreApp> createState() => _CineExploreAppState();
 }
 
 class _CineExploreAppState extends State<CineExploreApp> {
-  late final _router = createAppRouter(
-    repository: widget.repository,
-    themeController: widget.themeController,
-  );
-
-  @override
-  void initState() {
-    super.initState();
-    widget.themeController.addListener(_refreshTheme);
-  }
-
-  @override
-  void dispose() {
-    widget.themeController.removeListener(_refreshTheme);
-    super.dispose();
-  }
-
-  void _refreshTheme() => setState(() {});
+  late final _router = createAppRouter();
 
   @override
   Widget build(BuildContext context) {
+    final themeController = context.watch<ThemeController>();
+    
+    // We listen to AuthProvider in the router, but we must also ensure 
+    // GoRouter refreshes on auth state change. For simplicity here, 
+    // context.watch<AuthProvider>() will trigger a rebuild of MaterialApp, 
+    // which rebuilds the router.
+    context.watch<AuthProvider>();
+
     return MaterialApp.router(
       title: 'CineExplore',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: widget.themeController.themeMode,
+      themeMode: themeController.themeMode,
       routerConfig: _router,
     );
   }

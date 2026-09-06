@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../data/models/movie.dart';
+import '../../features/movies/data/models/movie.dart';
 import 'rating_badge.dart';
 
 class MovieCard extends StatelessWidget {

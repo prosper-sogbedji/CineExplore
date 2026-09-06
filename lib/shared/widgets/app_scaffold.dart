@@ -6,17 +6,14 @@ class AppScaffold extends StatelessWidget {
 
   final Widget child;
 
-  static const _routes = ['/home', '/movies', '/add-movie', '/settings'];
+  static const _routes = ['/home', '/movies', '/settings'];
 
   int _selectedIndex(String location) {
     if (location.startsWith('/movies') || location.startsWith('/movie/')) {
       return 1;
     }
-    if (location.startsWith('/add-movie')) {
-      return 2;
-    }
     if (location.startsWith('/settings')) {
-      return 3;
+      return 2;
     }
     return 0;
   }
@@ -39,17 +36,12 @@ class AppScaffold extends StatelessWidget {
           NavigationDestination(
             icon: Icon(Icons.search_outlined),
             selectedIcon: Icon(Icons.search),
-            label: 'Films',
+            label: 'Recherche',
           ),
           NavigationDestination(
-            icon: Icon(Icons.add_circle_outline),
-            selectedIcon: Icon(Icons.add_circle),
-            label: 'Ajouter',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.settings_outlined),
-            selectedIcon: Icon(Icons.settings),
-            label: 'Parametres',
+            icon: Icon(Icons.person_outline),
+            selectedIcon: Icon(Icons.person),
+            label: 'Profil',
           ),
         ],
       ),

@@ -1,61 +1,54 @@
-# CineExplore
+# CineExplore Full-Stack
 
-CineExplore est une application Flutter de découverte de films construite pour démontrer l'utilisation de GoRouter et de ChangeNotifier pour la gestion d'état. Le projet charge une liste locale de films, génère un catalogue complet, et propose des recherches, des filtres, des détails de film, un formulaire d'ajout et des états d'interface utilisateur explicites.
+CineExplore a été mis à niveau vers une application Flutter full-stack pour valider la maîtrise des APIs, de l'architecture et de la persistance des données. 
 
 ## Fonctionnalités
 
-- Catalogue de films sous forme de cartes avec affiche, titre, année, genre et note.
-- Détail complet transmis via route `/movie/:id` avec gestion de film introuvable.
-- Recherche par titre ou réalisateur.
-- Filtrage par genre et par année.
-- Formulaire d'ajout avec validations et feedback utilisateur.
-- Écran profil/paramètres avec informations utilisateur mockées.
-- États de chargement, aucun résultat et erreur.
-- Thème clair/sombre Material 3 et navigation par `NavigationBar`.
+- **Authentification (JWT)** : Système de connexion et d'inscription avec stockage sécurisé du token.
+- **Catalogue Connecté** : Intégration avec **TMDB (The Movie Database)** pour récupérer les films tendances, rechercher des films, et afficher les détails.
+- **Cache Local & Hors-ligne** : Les films récupérés sont sauvegardés via **SQLite**. En cas de perte réseau, l'application bascule automatiquement sur le cache local.
+- **Gestion des Erreurs** : Interception des erreurs réseau avec feedbacks utilisateurs clairs.
+- **Architecture Clean / Feature-First** : Code organisé par fonctionnalités (Auth, Movies) avec séparation stricte des couches (Data, Domain, Presentation).
 
 ## Technologies
 
-- Flutter
-- Dart
-- GoRouter
-- ChangeNotifier
-- Liste locale
-- Material 3
+- **Flutter** & **Dart**
+- **Dio** : Appels réseau et intercepteurs (injection de token et fallback hors-ligne).
+- **SQLite (`sqflite`)** : Persistance des données relationnelles en local.
+- **Provider** : Gestion de l'état simple et réactive.
+- **GoRouter** : Navigation avec redirections basées sur l'état de l'authentification (Auth Guard).
+- **Mocktail** : Tests unitaires.
 
-## Architecture
-
-```text
-Presentation
-   ↓
-Router
-   ↓
-Controllers
-   ↓
-Repositories
-   ↓
-Local List
-```
-
-Structure principale :
+## Architecture (Feature-First)
 
 ```text
 lib/
-├── data/
-│   ├── models/
-│   └── repositories/
-├── router/
-├── screens/
-├── state/
-├── theme/
-└── widgets/
+├── core/
+│   ├── database/       (Configuration SQLite, DatabaseHelper)
+│   ├── network/        (DioClient, AuthInterceptor, ApiConstants)
+│   ├── router/         (GoRouter, Auth Guard)
+│   └── theme/          (ThemeController)
+├── features/
+│   ├── auth/
+│   │   ├── data/       (Models, AuthRepository)
+│   │   └── presentation/ (LoginScreen, RegisterScreen, AuthProvider)
+│   └── movies/
+│       ├── data/       (Models, MovieRepository, MovieDao)
+│       └── presentation/ (HomeScreen, MoviesScreen, DetailScreen, MovieProvider)
+└── shared/
+    └── widgets/        (Composants réutilisables)
 ```
 
-## Fournisseurs
+## Configuration du Projet (IMPORTANT)
 
-| Fournisseur | Responsabilité |
-|---|---|
-| `MovieRepository` | Fournit le référentiel des films, la recherche et le filtrage |
-| `ThemeController` | Gère le thème clair/sombre |
+Pour utiliser ce projet, vous devez fournir votre propre clé d'API TMDB :
+
+1. Ouvrez le fichier `lib/core/network/api_constants.dart`.
+2. Remplacez la valeur de `tmdbApiKey` par votre clé (ex: `static const String tmdbApiKey = 'VOTRE_CLE';`).
+
+L'authentification utilise l'API publique de test **ReqRes.in** pour simuler un vrai JWT backend (login/register). 
+- *Email de test* : `eve.holt@reqres.in`
+- *Mot de passe* : (n'importe lequel, ex: `cityslicka`)
 
 ## Installation
 
@@ -66,12 +59,12 @@ flutter run
 
 ## Tests
 
+Plusieurs tests unitaires stricts ont été implémentés pour valider la logique d'accès aux données (Repository pattern).
+
 ```bash
 flutter test
 ```
 
-Les tests couvrent la recherche, le filtrage, la récupération par ID, le comportement avec ID inexistant, l'ajout d'un film et les validations principales du formulaire.
-
 ## Captures d'écran
 
-Section prévue pour ajouter les captures d'écran du catalogue, du détail de film, du formulaire et du mode sombre.
+(À rajouter par l'utilisateur une fois l'application lancée avec succès).
